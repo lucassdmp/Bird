@@ -6,7 +6,7 @@ defmodule Bird.Timeline.Post do
     field :body, :string
     field :likes_count, :integer, default: 0
     field :reposts_count, :integer, default: 0
-    field :username, :string, default: "teste"
+    field :username, :string, default: "Anom"
 
     timestamps()
   end
