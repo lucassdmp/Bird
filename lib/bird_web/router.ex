@@ -9,11 +9,16 @@ defmodule BirdWeb.Router do
     plug :put_root_layout, {BirdWeb.LayoutView, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
-    plug Pow.Plug.Session, otp_app: :my_app
+    plug Pow.Plug.Session, otp_app: :bird
   end
 
   pipeline :api do
     plug :accepts, ["json"]
+  end
+
+  pipeline :protected do
+    plug Pow.Plug.RequireAuthenticated,
+      error_handler: Pow.Phoenix.PlugErrorHandler
   end
 
   scope "/" do
@@ -23,7 +28,7 @@ defmodule BirdWeb.Router do
   end
 
   scope "/", BirdWeb do
-    pipe_through :browser
+    pipe_through [:browser, :protected]
 
     live "/posts", PostLive.Index, :index
     live "/posts/new", PostLive.Index, :new
@@ -31,9 +36,14 @@ defmodule BirdWeb.Router do
 
     live "/posts/:id", PostLive.Show, :show
     live "/posts/:id/show/edit", PostLive.Show, :edit
+  end
+
+  scope "/", BirdWeb do
+    pipe_through [:browser]
 
     live "/", PageLive, :index
   end
+
 
 
   # Other scopes may use custom stacks.
