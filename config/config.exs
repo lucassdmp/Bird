@@ -27,6 +27,7 @@ config :logger, :console,
 config :phoenix, :json_library, Jason
 
 config :bird, :pow,
+  web_module: BirdWeb,
   user: Bird.Users.User,
   repo: Bird.Repo
 
